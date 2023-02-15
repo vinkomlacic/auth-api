@@ -5,8 +5,6 @@ from pydantic import BaseSettings, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
-    API_V1_STR: str = "/api/v1"
-
     # Security
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALGORITHM: str = 'HS256'
