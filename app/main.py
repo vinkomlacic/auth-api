@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from app import schemas, auth_service, dependencies as deps
 from app.security_utils import create_access_token
 from app.config import settings
-from postgres import user_repository, models
+from postgres import models
+from postgres.user_repository import UserRepository
 from postgres.database import engine
 
 
@@ -18,11 +19,14 @@ app = FastAPI()
 
 @app.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_db)):
-    db_user = user_repository.get_user_by_username(db, username=user.username)
+    """Creates user from the provided data. If the username already exists, raises an error."""
+    user_repository = UserRepository(db)
+
+    db_user = user_repository.get_user_by_username(user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already exists")
 
-    return user_repository.create_user(db=db, user=user)
+    return user_repository.create_user(user=user)
 
 
 @app.post("/token", response_model=schemas.Token)
@@ -46,7 +50,11 @@ def get_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = De
 
 @app.get("/users/me", response_model=schemas.User)
 def get_users_me(current_user: schemas.User = Depends(deps.get_current_user), db: Session = Depends(deps.get_db)):
-    db_user = user_repository.get_user(db, user_id=current_user.id)
+    """Gets the currently logged-in user. If the user does not exist, raises an error."""
+    user_repository = UserRepository(db)
+
+    db_user = user_repository.get_user(current_user.id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
+
     return db_user
