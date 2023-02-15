@@ -31,6 +31,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_db)):
 
 @app.post("/token", response_model=schemas.Token)
 def get_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(deps.get_db)):
+    """Authenticates the user and if the authentication passes, returns a re-usable access token."""
     user = auth_service.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
