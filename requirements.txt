@@ -1,1 +1,12 @@
 fastapi[all]
+
+# Tools for handling JWTs
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Database ORM and migrations
+sqlalchemy
+alembic
+
+# Support for postgres
+psycopg2
