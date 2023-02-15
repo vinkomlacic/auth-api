@@ -1,6 +1,11 @@
 # auth-api
 Simple Authentication API made in FastAPI
 
+# Endpoints
+ * **[POST]** `/users` - registers a new user
+ * **[POST]** `/token` - retrieves an access token provided the credentials
+ * **[GET]** `/user/me` - retrieves the current user (protected by authentication)
+
 
 # Quickstart for local development
 1. Setup the virtual environment and install packages from `requirements.txt`
