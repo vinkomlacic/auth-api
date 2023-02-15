@@ -1,0 +1,20 @@
+version: '3'
+services:
+
+  # Database
+  db:
+    container_name: auth_api_db
+    image: postgres:12
+    env_file:
+      - ../.env
+    volumes:
+      - db_volume_12:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_volume_12: {}
+
+networks:
+  default:
+    driver: bridge
