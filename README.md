@@ -18,7 +18,11 @@ pip install -r requirements.txt
 cd docker
 docker-compose up -d
 ```
-4. Run the server
+4. Run migrations (do this only the first time)
+```bash
+alembic upgrade head
+```
+5. Run the server
 ```bash
 python -m uvicorn app.main:app --reload
 ```
